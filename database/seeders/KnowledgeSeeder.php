@@ -3,84 +3,92 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Knowledge;
+use Illuminate\Support\Facades\DB;
 
 class KnowledgeSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         $preguntas = [
-
+            // Banco de preguntas originales
             [
-                'pregunta' => 'que es el sena',
-                'respuesta' => 'El SENA es una institución pública de Colombia que ofrece formación técnica y tecnológica gratuita para el trabajo.',
-                'categoria' => 'informacion'
+                'pregunta' => '¿Qué es el SENA?',
+                'respuesta' => 'El Servicio Nacional de Aprendizaje (SENA) es un establecimiento público del orden nacional en Colombia que ofrece formación gratuita a millones de colombianos en programas técnicos, tecnológicos y complementarios.',
+                'categoria' => 'general'
             ],
-
             [
-                'pregunta' => 'que programas ofrece el sena',
-                'respuesta' => 'El SENA ofrece programas técnicos, tecnólogos y cursos cortos en áreas como software, administración, salud, logística y más.',
+                'pregunta' => '¿Cómo me registro en el SENA?',
+                'respuesta' => 'Para registrarte en el SENA debes ingresar al portal de SOFIA Plus (senasofiaplus.edu.co), hacer clic en el botón "Registrarse", validar tu identidad eligiendo el tipo/número de documento y llenar el formulario para generar una contraseña.',
+                'categoria' => 'registro'
+            ],
+            [
+                'pregunta' => '¿Qué programas ofrece el SENA?',
+                'respuesta' => 'El SENA ofrece formación presencial y virtual en niveles de Operario, Auxiliar, Técnico, Tecnólogo y Especialización Tecnológica, además de cursos cortos en áreas de Salud, Sistemas, Comercio, Agro, etc.',
                 'categoria' => 'programas'
             ],
-
             [
-                'pregunta' => 'que es sofia plus',
-                'respuesta' => 'Sofia Plus es la plataforma del SENA donde los aspirantes pueden inscribirse a los programas de formación.',
+                'pregunta' => '¿Cómo recuperar mi contraseña?',
+                'respuesta' => 'Si olvidaste tu contraseña de SOFIA Plus, ingresa al portal, ve a "Olvidó su contraseña", digita tu tipo y número de documento, y revisa el correo electrónico registrado para las instrucciones de recuperación.',
+                'categoria' => 'soporte'
+            ],
+            [
+                'pregunta' => '¿Qué es Sofia Plus?',
+                'respuesta' => 'SOFIA Plus (Sistema Optimizado para la Formación Integral del Aprendizaje Activo) es la plataforma principal tecnológica del SENA, donde se gestionan los procesos formativos, inscripciones, certificados y novedades.',
                 'categoria' => 'plataforma'
             ],
-
             [
-                'pregunta' => 'cuando se abren las inscripciones del sena',
-                'respuesta' => 'Las inscripciones del SENA se abren varias veces al año. Debes consultar las convocatorias en la página oficial o en Sofia Plus.',
-                'categoria' => 'inscripciones'
+                'pregunta' => '¿Cómo inscribirme a un curso?',
+                'respuesta' => '1. Ingresa a SOFIA Plus. 2. Usa el buscador para encontrar un curso. 3. Verifica los requisitos y horarios. 4. Haz clic en "Inscripción". 5. Confirma tu registro ingresando tu usuario y contraseña.',
+                'categoria' => 'inscripcion'
             ],
 
+            // NUEVAS PREGUNTAS AÑADIDAS
             [
-                'pregunta' => 'como inscribirse en el sena',
-                'respuesta' => 'Para inscribirte debes ingresar a la plataforma Sofia Plus, buscar el programa de interés y completar el proceso de inscripción.',
-                'categoria' => 'inscripciones'
+                'pregunta' => '¿Qué es la etapa productiva?',
+                'respuesta' => 'Es la fase de la formación en la que el aprendiz SENA aplica, complementa y consolida sus competencias en un entorno laboral real para la resolución de problemas y desempeño productivo en una empresa.',
+                'categoria' => 'general'
             ],
-
             [
-                'pregunta' => 'que documentos necesito para inscribirme en el sena',
-                'respuesta' => 'Generalmente necesitas tu documento de identidad y cumplir con los requisitos del programa de formación.',
-                'categoria' => 'inscripciones'
+                'pregunta' => '¿Cómo busco ofertas de empleo en la Agencia Pública de Empleo APE o sena empleo?',
+                'respuesta' => 'Ingresa a ape.sena.edu.co, regístrate o inicia sesión, completa tu hoja de vida y usa el buscador de vacantes por palabra clave o departamento para postularte.',
+                'categoria' => 'plataforma'
             ],
-
             [
-                'pregunta' => 'donde queda el sena',
-                'respuesta' => 'El SENA tiene centros de formación en todo Colombia. Puedes consultar la sede más cercana en la página oficial del SENA.',
-                'categoria' => 'ubicacion'
+                'pregunta' => '¿Qué es un contrato de aprendizaje?',
+                'respuesta' => 'Es una forma especial de vinculación dentro del código laboral sin subordinación, donde el estudiante recibe formación con el patrocinio de una empresa que le otorga apoyo de sostenimiento.',
+                'categoria' => 'general'
             ],
-
             [
-                'pregunta' => 'como encontrar un centro de formacion del sena',
-                'respuesta' => 'Puedes encontrar el centro de formación más cercano consultando la página oficial del SENA o la plataforma Sofia Plus.',
-                'categoria' => 'ubicacion'
-            ],
-
-            [
-                'pregunta' => 'que es adso',
-                'respuesta' => 'ADSO significa Análisis y Desarrollo de Software, un programa tecnólogo del SENA enfocado en programación, bases de datos y desarrollo de aplicaciones.',
+                'pregunta' => '¿Puedo estudiar dos carreras al mismo tiempo en el SENA?',
+                'respuesta' => 'No es posible cursar dos programas de formación titulada al mismo tiempo (ej. dos tecnólogos). Sin embargo, sí puedes cursar un programa titulado y simultáneamente inscribirte en cursos cortos de formación complementaria virtual.',
                 'categoria' => 'programas'
             ],
-
             [
-                'pregunta' => 'cuanto dura el programa adso',
-                'respuesta' => 'El programa ADSO del SENA generalmente tiene una duración aproximada de 27 meses incluyendo etapa lectiva y práctica.',
-                'categoria' => 'programas'
+                'pregunta' => '¿Cómo descargar mi certificado del SENA?',
+                'respuesta' => 'Ingresa a certificados.sena.edu.co, selecciona tu tipo de documento, digita el número, haz clic en "Consultar" y podrás descargar tus certificados de formación aprobada.',
+                'categoria' => 'soporte'
             ],
-
             [
-                'pregunta' => 'que se aprende en adso',
-                'respuesta' => 'En ADSO se aprende programación, desarrollo web, bases de datos, análisis de sistemas y metodologías de desarrollo de software.',
-                'categoria' => 'programas'
+                'pregunta' => '¿Cuales son los requisitos de ingreso al sena?',
+                'respuesta' => 'Los requisitos varían según el nivel: para operarios/auxiliares piden grado 5 o 9 aprobado. Para técnicos, ser bachiller o noveno grado. Para tecnólogos, tener diploma de bachiller y haber presentado las pruebas ICFES saber 11.',
+                'categoria' => 'registro'
             ],
-
+            [
+                'pregunta' => '¿Qué es el Fondo Emprender?',
+                'respuesta' => 'El Fondo Emprender es un modelo de capital semilla del SENA creado para financiar iniciativas empresariales de aprendices y diferentes colombianos, buscando transformar ideas en negocios y empresas.',
+                'categoria' => 'general'
+            ]
         ];
 
-        foreach ($preguntas as $pregunta) {
-            Knowledge::create($pregunta);
+        // Insertar registros, actualizando si ya existen (updateOrInsert evita duplicados y actualiza campos)
+        foreach ($preguntas as $item) {
+            DB::table('knowledge')->updateOrInsert(
+                ['pregunta' => $item['pregunta']],
+                $item
+            );
         }
     }
 }

@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->text('pregunta');
-            $table->text('respuesta');
-            $table->string('source'); // database o ai
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('session_id')->index();
+            $table->enum('role', ['user', 'assistant', 'system']);
+            $table->text('content');
             $table->timestamps();
         });
     }
