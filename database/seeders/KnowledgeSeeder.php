@@ -80,6 +80,38 @@ class KnowledgeSeeder extends Seeder
                 'pregunta' => '¿Qué es el Fondo Emprender?',
                 'respuesta' => 'El Fondo Emprender es un modelo de capital semilla del SENA creado para financiar iniciativas empresariales de aprendices y diferentes colombianos, buscando transformar ideas en negocios y empresas.',
                 'categoria' => 'general'
+            ],
+
+            // NUEVAS PREGUNTAS AÑADIDAS DESDE EL FRONTEND
+            [
+                'pregunta' => '¿Cuando abren las inscripciones?',
+                'respuesta' => 'Las fechas de inscripción a los programas de formación del SENA varían según la convocatoria (normalmente trimestral). Te invitamos a consultar el calendario académico oficial en el portal SOFIA Plus para conocer las fechas exactas.',
+                'categoria' => 'inscripcion'
+            ],
+            [
+                'pregunta' => '¿Ubicacion de instalaciones?',
+                'respuesta' => 'El SENA cuenta con múltiples centros de formación en todo el país. Para encontrar la sede más cercana a ti, puedes consultar el directorio de la sección de "Sedes" en el portal oficial del SENA.',
+                'categoria' => 'general'
+            ],
+            [
+                'pregunta' => '¿Cómo puedo crear una cuenta?',
+                'respuesta' => 'Para crear una cuenta en la plataforma AVIS, dirígete a la opción de registro que se encuentra en la pantalla de inicio de sesión. Completa y envía tus datos para que un administrador pueda habilitar tu perfil.',
+                'categoria' => 'plataforma'
+            ],
+            [
+                'pregunta' => '¿Cuáles son los planes disponibles?',
+                'respuesta' => 'Actualmente el acceso a todos los servicios de la plataforma AVIS del SENA es completamente gratuito, por lo cual no existen modalidades ni planes de pago.',
+                'categoria' => 'general'
+            ],
+            [
+                'pregunta' => '¿Cómo contacto a soporte?',
+                'respuesta' => 'Para temas relacionados con las plataformas del SENA que AVIS no haya podido resolver, te puedes acercar a la oficina de atención al ciudadano de tu centro de formación o comunicarte a las líneas gratuitas nacionales del contact center.',
+                'categoria' => 'soporte'
+            ],
+            [
+                'pregunta' => '¿Qué es AVIS?',
+                'respuesta' => 'AVIS es el Asistente Virtual Inteligente de Soporte diseñado para resolver tus dudas e inquietudes de manera inmediata sobre los procesos, plataformas y programas de formación de nuestra institución.',
+                'categoria' => 'plataforma'
             ]
         ];
 
