@@ -1,0 +1,6 @@
+PHP Fatal error:  Uncaught BadMethodCallException: Method Illuminate\Foundation\Application::withMiddleware does not exist. in C:\dev\backend-avis\vendor\laravel\framework\src\Illuminate\Macroable\Traits\Macroable.php:115
+Stack trace:
+#0 C:\dev\backend-avis\bootstrap\app.php(20): Illuminate\Foundation\Application->__call()
+#1 C:\dev\backend-avis\artisan(14): require_once('...')
+#2 {main}
+  thrown in C:\dev\backend-avis\vendor\laravel\framework\src\Illuminate\Macroable\Traits\Macroable.php on line 115
