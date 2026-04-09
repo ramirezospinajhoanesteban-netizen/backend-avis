@@ -12,7 +12,7 @@ use App\Mail\RecoveryCodeMail;
 
 class ForgotPasswordController extends Controller
 {
-    public function sendResetlink(Request $request){
+    public function sendResetLink(Request $request){
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ]);

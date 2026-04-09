@@ -20,7 +20,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|in:admin,instructor,user',
+            'role'      => 'required|in:admin,instructor,aprendiz',
             'password' => 'required|string|min:8',
             'is_active' => 'boolean'
         ]);
@@ -47,10 +47,11 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         
         $validated = $request->validate([
-            'role' => 'sometimes|string',
+            'name'      => 'sometimes|string|max:255',
+            'email'     => 'sometimes|email|unique:users,email,' . $id,
+            'role'      => 'sometimes|in:admin,instructor,aprendiz', 
             'is_active' => 'sometimes|boolean',
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,'.$id
+            'password'  => 'sometimes|nullable|string|min:8',
         ]);
 
         $user->update($validated);

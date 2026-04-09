@@ -44,9 +44,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 3. Poblar la base de conocimiento
+        // 3. Poblar la base de conocimiento y estadísticas
         $this->call([
-            KnowledgeSeeder::class
+            KnowledgeSeeder::class,
+            VisitasEroresSeeder::class
         ]);
     }
 }
