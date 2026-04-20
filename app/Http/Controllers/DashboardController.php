@@ -37,11 +37,19 @@ class DashboardController extends Controller
             ->orderBy('fecha')
             ->get();
 
+        $knowledgeStats = [
+            'total' => DB::table('knowledge')->count(),
+            'pendiente' => DB::table('knowledge')->where('status', 'pendiente')->count(),
+            'respondida' => DB::table('knowledge')->where('status', 'respondida')->count(),
+            'en_revision' => DB::table('knowledge')->where('status', 'en_revision')->count(),
+        ];
+
         return response()->json([
             'visitas' => $visitas,
             'usuarios' => $usuarios,
             'no_registrados' => round($porcentajeNoRegistrados, 2),
-            'errores' => $errores
+            'errores' => $errores,
+            'knowledge' => $knowledgeStats
         ]);
     }
 }

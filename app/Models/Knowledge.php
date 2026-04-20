@@ -10,6 +10,7 @@ class Knowledge extends Model
     protected $fillable = [
         'pregunta',
         'respuesta',
-        'categoria'
+        'categoria',
+        'status'
     ];
 }

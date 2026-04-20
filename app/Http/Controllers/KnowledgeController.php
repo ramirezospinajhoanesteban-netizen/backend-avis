@@ -8,11 +8,25 @@ use App\Models\Knowledge;
 class KnowledgeController extends Controller
 {
     // GET /api/knowledge
-    public function index()
+    public function index(Request $request)
     {
+        $query = Knowledge::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('pregunta', 'like', "%{$search}%")
+                  ->orWhere('respuesta', 'like', "%{$search}%");
+            });
+        }
+
         return response()->json([
             'success' => true,
-            'data' => Knowledge::orderBy('created_at', 'desc')->get()
+            'data' => $query->orderBy('created_at', 'desc')->get()
         ]);
     }
 
@@ -21,9 +35,14 @@ class KnowledgeController extends Controller
     {
         $validated = $request->validate([
             'pregunta'  => 'required|string',
-            'respuesta' => 'required|string',
+            'respuesta' => 'nullable|string',
             'categoria' => 'nullable|string|max:255',
+            'status'    => 'nullable|string|in:pendiente,respondida,en_revision'
         ]);
+
+        if (!isset($validated['status'])) {
+            $validated['status'] = $request->filled('respuesta') ? 'respondida' : 'pendiente';
+        }
 
         $knowledge = Knowledge::create($validated);
 
@@ -40,8 +59,9 @@ class KnowledgeController extends Controller
 
         $validated = $request->validate([
             'pregunta'  => 'sometimes|required|string',
-            'respuesta' => 'sometimes|required|string',
+            'respuesta' => 'sometimes|nullable|string',
             'categoria' => 'sometimes|nullable|string|max:255',
+            'status'    => 'sometimes|required|string|in:pendiente,respondida,en_revision'
         ]);
 
         $knowledge->update($validated);

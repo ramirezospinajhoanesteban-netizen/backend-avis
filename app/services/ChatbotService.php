@@ -50,8 +50,41 @@ class ChatbotService
             return $respuestaBd;
         }
 
-        // 2. Si no encuentra nada, usar la lógica por defecto estructurada (match)
+        // 2. Si no encuentra nada, verificar si es un mensaje que valga la pena registrar
+        // (Omitimos saludos y ayuda según requerimiento)
+        $mensajeLimpio = mb_strtolower(trim($mensaje), 'UTF-8');
+        $esSaludo = str_contains($mensajeLimpio, 'hola') || str_contains($mensajeLimpio, 'saludos');
+        $esAyuda = str_contains($mensajeLimpio, 'ayuda');
+
+        if (!$esSaludo && !$esAyuda) {
+            $this->registrarPreguntaSinRespuesta($mensaje);
+        }
+
+        // 3. Usar la lógica por defecto estructurada (match)
         return $this->respuestaPorDefecto($mensaje);
+    }
+
+    /**
+     * Registra una pregunta en la tabla knowledge con estado 'pendiente' para que
+     * aparezca en el dashboard del administrador. Evita duplicados.
+     */
+    protected function registrarPreguntaSinRespuesta(string $mensaje): void
+    {
+        // Validar que no sea un mensaje vacío o demasiado corto
+        if (strlen(trim($mensaje)) < 5) return;
+
+        // Evitar duplicados: verificar si ya existe esa pregunta pendiente
+        $existe = Knowledge::where('pregunta', $mensaje)
+                          ->where('status', 'pendiente')
+                          ->exists();
+
+        if (!$existe) {
+            Knowledge::create([
+                'pregunta'  => $mensaje,
+                'status'    => 'pendiente',
+                'categoria' => 'Consultas Bot'
+            ]);
+        }
     }
 
     /**
@@ -66,9 +99,9 @@ class ChatbotService
             return null;
         }
 
-        // 2. Traer todas las preguntas de la base de conocimientos
+        // 2. Traer todas las preguntas de la base de conocimientos que estén aprobadas
         // Para bases de datos gigantes se usa SQL FullText. Para un número razonable de FAQs, iterar es perfecto en PHP.
-        $conocimientos = Knowledge::all();
+        $conocimientos = Knowledge::where('status', 'respondida')->get();
         
         $mejorMatch = null;
         $maxPuntaje = 0;
