@@ -47,7 +47,8 @@ class DatabaseSeeder extends Seeder
         // 3. Poblar la base de conocimiento y estadísticas
         $this->call([
             KnowledgeSeeder::class,
-            VisitasEroresSeeder::class
+            VisitasEroresSeeder::class,
+            MassiveDemoSeeder::class
         ]);
     }
 }
