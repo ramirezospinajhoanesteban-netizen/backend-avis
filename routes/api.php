@@ -16,6 +16,10 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'
 
 // Rutas Protegidas — Usuarios Autenticados
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::put('/user', [AuthController::class, 'updateProfile']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/chat', [ChatController::class, 'sendMessage']);
     Route::get('/chat/history', [ChatController::class, 'getHistory']);

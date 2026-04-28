@@ -18,9 +18,17 @@ class KnowledgeController extends Controller
 
         if ($request->has('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('pregunta', 'like', "%{$search}%")
-                  ->orWhere('respuesta', 'like', "%{$search}%");
+            $words = explode(' ', $search);
+            
+            $query->where(function($q) use ($words) {
+                foreach ($words as $word) {
+                    if (trim($word) === '') continue;
+                    $q->where(function($sq) use ($word) {
+                        $sq->where('pregunta', 'like', "%{$word}%")
+                          ->orWhere('respuesta', 'like', "%{$word}%")
+                          ->orWhere('categoria', 'like', "%{$word}%");
+                    });
+                }
             });
         }
 
