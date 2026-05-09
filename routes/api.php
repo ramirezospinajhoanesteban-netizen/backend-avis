@@ -25,6 +25,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/chat', [ChatController::class, 'sendMessage']);
     Route::get('/chat/history', [ChatController::class, 'getHistory']);
     Route::delete('/chat/history', [ChatController::class, 'clearHistory']);
+    
+    // Sesiones de Chat (Renombrar/Archivar)
+    Route::get('/chat/sessions', [ChatController::class, 'getSessions']);
+    Route::put('/chat/sessions/{sessionId}', [ChatController::class, 'updateSession']);
 });
 
 // Rutas Protegidas — Solo Administradores

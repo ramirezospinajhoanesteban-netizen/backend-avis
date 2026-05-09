@@ -82,11 +82,13 @@ class ChatController extends Controller
             $sessionId = $this->getSessionId($request);
 
             $historial = $this->chatbot->getHistory($userId, $sessionId);
+            $sessionInfo = \App\Models\ChatSession::where('session_id', $sessionId)->first();
 
             return response()->json([
                 'success' => true,
                 'data' => $historial,
-                'session_id' => $sessionId
+                'session_id' => $sessionId,
+                'session' => $sessionInfo
             ]);
         } catch (\Exception $e) {
              return response()->json([
@@ -112,10 +114,70 @@ class ChatController extends Controller
                 'message' => 'Historial de chat eliminado correctamente.'
             ]);
         } catch (\Exception $e) {
-             return response()->json([
+            return response()->json([
                 'success' => false,
                 'message' => 'Error al limpiar el historial.',
             ], 500);
+        }
+    }
+
+    /**
+     * Obtiene todas las sesiones del usuario actual.
+     */
+    public function getSessions(Request $request)
+    {
+        try {
+            $userId = auth()->id();
+            $sessionId = $this->getSessionId($request);
+
+            $query = \App\Models\ChatSession::query();
+            
+            if ($userId) {
+                // Si está logueado, traer sus sesiones (no archivadas por defecto)
+                $query->where('user_id', $userId);
+            } else {
+                // Si es invitado, traer solo la sesión actual
+                $query->where('session_id', $sessionId);
+            }
+
+            // Si el request pide archivados
+            if ($request->has('archived')) {
+                $query->where('is_archived', true);
+            } else {
+                $query->where('is_archived', false);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $query->orderBy('updated_at', 'desc')->get()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error al obtener sesiones'], 500);
+        }
+    }
+
+    /**
+     * Actualiza el título o el estado de archivado de una sesión.
+     */
+    public function updateSession(Request $request, $sessionId)
+    {
+        try {
+            $session = \App\Models\ChatSession::where('session_id', $sessionId)->firstOrFail();
+            
+            $validated = $request->validate([
+                'title' => 'sometimes|string|max:255',
+                'is_archived' => 'sometimes|boolean'
+            ]);
+
+            $session->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sesión actualizada correctamente',
+                'data' => $session
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error al actualizar sesión'], 500);
         }
     }
 }

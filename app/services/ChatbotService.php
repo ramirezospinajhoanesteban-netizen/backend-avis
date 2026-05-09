@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Message;
 use App\Models\Knowledge;
+use App\Models\ChatSession;
 use Illuminate\Support\Str;
 
 class ChatbotService
@@ -13,6 +14,15 @@ class ChatbotService
      */
     public function procesar(string $mensaje, ?int $userId, string $sessionId): string
     {
+        // 0. Asegurar que existe el registro de la sesión para metadatos (Renombrar/Archivar)
+        ChatSession::firstOrCreate(
+            ['session_id' => $sessionId],
+            [
+                'user_id' => $userId, 
+                'title'   => mb_strtoupper(mb_substr($mensaje, 0, 40)) . (strlen($mensaje) > 40 ? '...' : '')
+            ]
+        );
+
         // 1. Guardar el mensaje del usuario
         Message::create([
             'user_id' => $userId,
