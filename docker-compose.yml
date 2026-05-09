@@ -1,8 +1,30 @@
 services:
-  app:
+  backend:
     build: .
     container_name: backend-avis
     ports:
       - "8000:80"
     volumes:
       - .:/var/www/html
+    networks:
+      - avis-network
+
+  frontend:
+    build: 
+      context: ../Frontend
+      dockerfile: Dockerfile
+    container_name: frontend-avis
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../Frontend:/app
+      - /app/node_modules
+    command: sh -c "rm -rf node_modules/esbuild && npm install esbuild && npm run dev -- --host"
+    networks:
+      - avis-network
+    depends_on:
+      - backend
+
+networks:
+  avis-network:
+    driver: bridge

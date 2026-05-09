@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -74,7 +76,33 @@ class AuthController extends Controller
             'name'     => 'sometimes|string|max:255',
             'email'    => 'sometimes|email|unique:users,email,' . $user->id,
             'password' => 'sometimes|nullable|string|min:8|confirmed',
+            'avatar'   => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max
         ]);
+
+        // Manejo de la subida del avatar a Supabase
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $fileName = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = 'avatars/' . $fileName;
+
+            // Enviar a Supabase Storage (Formato binario directo)
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('SUPABASE_ANON_KEY'),
+                'Content-Type'  => $file->getMimeType(),
+            ])->withBody(file_get_contents($file->getRealPath()), $file->getMimeType())
+              ->post(env('SUPABASE_URL') . '/storage/v1/object/avatars/' . $fileName);
+
+            if ($response->successful()) {
+                // Generar la URL pública
+                $validated['avatar_url'] = env('SUPABASE_URL') . '/storage/v1/object/public/avatars/' . $fileName;
+            } else {
+                $supabaseError = $response->json()['message'] ?? 'Error desconocido en Supabase';
+                return response()->json([
+                    'message' => 'Error de Supabase: ' . $supabaseError,
+                    'debug' => $response->json()
+                ], 500);
+            }
+        }
 
         if (isset($validated['password']) && !empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
@@ -86,7 +114,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Perfil actualizado correctamente',
-            'user' => $user
+            'user' => $user->fresh()
         ]);
     }
 }
