@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SuggestionController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -46,7 +47,15 @@ Route::middleware(['auth:sanctum', \App\Http\Middleware\CheckAdmin::class])->gro
     
     // Estadísticas
     Route::get('/dashboard', [DashboardController::class, 'stats']);
+
+    // Sugerencias — Admin (ver, cambiar estado, eliminar)
+    Route::get('/sugerencias', [SuggestionController::class, 'index']);
+    Route::put('/sugerencias/{id}', [SuggestionController::class, 'update']);
+    Route::delete('/sugerencias/{id}', [SuggestionController::class, 'destroy']);
 });
 
 // Rutas Públicas — Solo Lectura
 Route::get('/knowledge', [KnowledgeController::class, 'index']);
+
+// Sugerencias — Pública (cualquier usuario puede enviar)
+Route::post('/sugerencias', [SuggestionController::class, 'store']);
