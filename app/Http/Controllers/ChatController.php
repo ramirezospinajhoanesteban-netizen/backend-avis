@@ -48,7 +48,7 @@ class ChatController extends Controller
             ]);
 
             $mensaje = $request->input('pregunta') ?? $request->input('message');
-            $userId = auth()->id(); // Retorna null si es invitado
+            $userId = auth('sanctum')->id(); // Retorna null si es invitado
             $sessionId = $this->getSessionId($request);
 
             // 2. Procesar con el servicio
@@ -78,7 +78,7 @@ class ChatController extends Controller
     public function getHistory(Request $request)
     {
         try {
-            $userId = auth()->id();
+            $userId = auth('sanctum')->id();
             $sessionId = $this->getSessionId($request);
 
             $historial = $this->chatbot->getHistory($userId, $sessionId);
@@ -104,7 +104,7 @@ class ChatController extends Controller
     public function clearHistory(Request $request)
     {
         try {
-            $userId = auth()->id();
+            $userId = auth('sanctum')->id();
             $sessionId = $this->getSessionId($request);
 
             $this->chatbot->clearHistory($userId, $sessionId);
@@ -127,7 +127,7 @@ class ChatController extends Controller
     public function getSessions(Request $request)
     {
         try {
-            $userId = auth()->id();
+            $userId = auth('sanctum')->id();
             $sessionId = $this->getSessionId($request);
 
             $query = \App\Models\ChatSession::query();

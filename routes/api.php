@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SuggestionController;
+use App\Http\Controllers\Api\DonationController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -23,13 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::put('/user', [AuthController::class, 'updateProfile']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/chat', [ChatController::class, 'sendMessage']);
-    Route::get('/chat/history', [ChatController::class, 'getHistory']);
-    Route::delete('/chat/history', [ChatController::class, 'clearHistory']);
-    
-    // Sesiones de Chat (Renombrar/Archivar)
-    Route::get('/chat/sessions', [ChatController::class, 'getSessions']);
-    Route::put('/chat/sessions/{sessionId}', [ChatController::class, 'updateSession']);
 });
 
 // Rutas Protegidas — Solo Administradores
@@ -58,4 +52,15 @@ Route::middleware(['auth:sanctum', \App\Http\Middleware\CheckAdmin::class])->gro
 Route::get('/knowledge', [KnowledgeController::class, 'index']);
 
 // Sugerencias — Pública (cualquier usuario puede enviar)
-Route::post('/sugerencias', [SuggestionController::class, 'store']);
+Route::post('/sugerencias', [SuggestionController::class, 'store']);
+
+// Chatbot — Pública (Soporta Invitados y Autenticados)
+Route::post('/chat', [ChatController::class, 'sendMessage']);
+Route::get('/chat/history', [ChatController::class, 'getHistory']);
+Route::delete('/chat/history', [ChatController::class, 'clearHistory']);
+Route::get('/chat/sessions', [ChatController::class, 'getSessions']);
+Route::put('/chat/sessions/{sessionId}', [ChatController::class, 'updateSession']);
+
+// Donaciones — Pública
+Route::post('/donations/init', [DonationController::class, 'init']);
+Route::post('/donations/webhook', [DonationController::class, 'webhook']);
