@@ -11,7 +11,7 @@ class DonationController extends Controller
     public function init(Request $request)
     {
         $validated = $request->validate([
-            'amount' => 'required|numeric|min:1000',
+            'amount' => 'required|numeric|min:1000|max:20000000',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'message' => 'nullable|string|max:500',
