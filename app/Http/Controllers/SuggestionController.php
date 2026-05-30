@@ -56,7 +56,13 @@ class SuggestionController extends Controller
 
         $sugerencias = $query->paginate(15);
 
-        return response()->json($sugerencias);
+        $customResponse = array_merge($sugerencias->toArray(), [
+            'total_nueva'    => Suggestion::where('estado', 'nueva')->count(),
+            'total_revisada' => Suggestion::where('estado', 'revisada')->count(),
+            'total_resuelta' => Suggestion::where('estado', 'resuelta')->count(),
+        ]);
+
+        return response()->json($customResponse);
     }
 
     /**
