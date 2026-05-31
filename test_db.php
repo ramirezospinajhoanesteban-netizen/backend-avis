@@ -5,11 +5,14 @@ $user = 'postgres.ehepeqyzcxbsjrbelymp';
 $pass = 'Dxe3dcfYRm95uUXK';
 $port = '5432';
 
+$start = microtime(true);
 echo "Testing connection to $host...\n";
 try {
     $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
     $pdo = new PDO($dsn, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    echo "Connection successful!\n";
+    $time = microtime(true) - $start;
+    echo "Connection successful! Time: {$time} seconds\n";
 } catch (\PDOException $e) {
-    echo "Connection failed: " . $e->getMessage() . "\n";
+    $time = microtime(true) - $start;
+    echo "Connection failed in {$time}s: " . $e->getMessage() . "\n";
 }
